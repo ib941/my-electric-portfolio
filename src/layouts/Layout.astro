@@ -1,0 +1,34 @@
+---
+import AIAssistant from '../components/AIAssistant.astro';
+
+const { pathname } = Astro.url;
+
+// Check if current path matches the arcade page
+const isArcadePage = pathname === '/arcade' || pathname === '/arcade/';
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="icon" href="/favicon.ico" />
+		<meta name="generator" content={Astro.generator} />
+		<title>Astro Basics</title>
+	</head>
+	<body>
+		<slot />
+
+		{!isArcadePage && <AIAssistant />}
+	</body>
+</html>
+
+<style>
+	html,
+	body {
+		margin: 0;
+		width: 100%;
+		height: 100%;
+	}
+</style>

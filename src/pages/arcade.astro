@@ -1,0 +1,346 @@
+---
+---
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>IBRAHIM ARCHIVE | ARCADE LABS</title>
+    <style>
+      body {
+        background-color: #050505;
+        background-image: radial-gradient(circle at 50% -20%, rgba(217, 70, 239, 0.1), rgba(5, 5, 5, 0) 60%);
+      }
+      canvas {
+        touch-action: none; /* Prevents mobile screen scrolling while playing */
+      }
+    </style>
+  </head>
+  <body class="text-white min-h-screen flex flex-col font-sans antialiased">
+    
+    <div class="w-full h-[1px] bg-zinc-900"></div>
+
+    <header class="w-full max-w-[1600px] mx-auto px-6 md:px-12 py-6 flex justify-between items-center border-b border-zinc-900">
+      <div class="text-xs uppercase tracking-[0.3em] font-medium text-zinc-400">
+        Experimental Interactive Core <span class="text-zinc-600">©2026</span>
+      </div>
+      <div class="text-sm font-bold tracking-[0.4em] text-white">
+        IBRAHIM | LABS
+      </div>
+      <nav class="flex gap-8 text-xs uppercase tracking-[0.3em] text-zinc-400">
+        <a href="/" class="hover:text-[#D946EF] transition-colors">Home</a>
+        <a href="/director" class="hover:text-[#D946EF] transition-colors">Director App</a>
+        <a href="/fintech" class="hover:text-[#D946EF] transition-colors">Fintech App</a>
+        <a href="/arcade" class="text-white hover:text-[#D946EF] transition-colors">Arcade</a>
+        <a href="/about" class="hover:text-[#D946EF] transition-colors">About</a>
+      </nav>
+    </header>
+
+    <main class="w-full max-w-[1200px] mx-auto px-6 py-12 flex-grow flex flex-col items-center justify-center">
+      
+      <div class="text-center mb-8 max-w-md">
+        <span class="text-[10px] uppercase tracking-[0.3em] text-[#D946EF] font-bold bg-[#D946EF]/10 px-3 py-1 rounded-full">System Sandbox v1.0</span>
+        <h1 class="text-3xl font-black tracking-tight mt-4 uppercase">Neon Hockey Arcade</h1>
+        <p class="text-xs text-zinc-500 mt-2 tracking-wide">Move your mouse or finger inside the bottom half of the board to control your glowing striker.</p>
+      </div>
+
+      <div class="flex flex-col md:flex-row gap-8 items-center justify-center w-full">
+        
+        <div class="border border-zinc-900 bg-[#080808]/50 p-4 rounded-sm shadow-2xl backdrop-blur-md relative">
+          <div class="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[#D946EF] to-transparent"></div>
+          
+          <canvas id="gameCanvas" width="400" height="600" class="bg-zinc-950 border border-zinc-900 rounded-sm cursor-none"></canvas>
+        </div>
+
+        <div class="w-full max-w-[280px] flex flex-col gap-4">
+          <div class="border border-zinc-900 bg-[#080808] p-5 rounded-sm relative overflow-hidden">
+            <h2 class="text-xs uppercase tracking-widest text-zinc-500 mb-4 font-bold">System Telemetry</h2>
+            
+            <div class="flex flex-col gap-3 font-mono text-xs">
+              <div class="flex justify-between items-center py-2 border-b border-zinc-900">
+                <span class="text-zinc-500">AI Core Score:</span>
+                <span id="aiScoreLabel" class="text-white font-bold text-sm">0</span>
+              </div>
+              <div class="flex justify-between items-center py-2 border-b border-zinc-900">
+                <span class="text-zinc-500">Player Score:</span>
+                <span id="playerScoreLabel" class="text-[#D946EF] font-bold text-sm">0</span>
+              </div>
+              <div class="flex justify-between items-center py-2">
+                <span class="text-zinc-500">Render Pipeline:</span>
+                <span class="text-emerald-400 text-[10px] uppercase tracking-wider font-sans font-bold bg-emerald-500/10 px-2 py-0.5 rounded-sm">60 FPS Canvas</span>
+              </div>
+            </div>
+          </div>
+
+          <button id="resetGameBtn" class="w-full border border-zinc-900 bg-zinc-950 text-zinc-400 font-bold uppercase text-[10px] tracking-widest py-3.5 hover:bg-white hover:text-black hover:border-white transition-all rounded-sm">
+            Reset Game Matrix
+          </button>
+        </div>
+
+      </div>
+
+    </main>
+
+    <footer class="w-full max-w-[1600px] mx-auto px-6 md:px-12 py-8 flex justify-between items-center text-[10px] uppercase tracking-[0.2em] text-zinc-600 border-t border-zinc-900/50">
+      <div>Engineered via Astro + HTML5 Canvas</div>
+      <div>All Rights Reserved</div>
+    </footer>
+
+    <script>
+      const canvas = document.getElementById('gameCanvas') as HTMLCanvasElement;
+      const ctx = canvas.getContext('2d');
+
+      const aiScoreLabel = document.getElementById('aiScoreLabel');
+      const playerScoreLabel = document.getElementById('playerScoreLabel');
+      const resetBtn = document.getElementById('resetGameBtn');
+
+      // Global Game Parameters Configuration Matrix
+      let playerScore = 0;
+      let aiScore = 0;
+
+      const puck = { x: 200, y: 300, vx: 0, vy: 0, radius: 12, maxSpeed: 14 };
+      const player = { x: 200, y: 500, radius: 22, color: '#D946EF' };
+      const ai = { x: 200, y: 100, radius: 22, color: '#ffffff', speed: 4.2 };
+
+      const goals = { x: 130, width: 140, depth: 4 };
+
+      // ==========================================
+      // NEW HOLOGRAPHIC PARTICLE SYSTEM CACHE MATRIX
+      // ==========================================
+      interface Particle {
+        x: number;
+        y: number;
+        vx: number;
+        vy: number;
+        radius: number;
+        alpha: number;
+        decay: number;
+        color: string;
+      }
+      let particleArray: Particle[] = [];
+
+      function triggerExplosion(impactX: number, impactY: number, color: string) {
+        // Birth 15 custom neon velocity fragments at the point of collision impact
+        for (let i = 0; i < 15; i++) {
+          particleArray.push({
+            x: impactX,
+            y: impactY,
+            vx: (Math.random() - 0.5) * 6,
+            vy: (Math.random() - 0.5) * 6,
+            radius: Math.random() * 2.5 + 1,
+            alpha: 1,
+            decay: 0.02 + Math.random() * 0.03,
+            color: color
+          });
+        }
+      }
+
+      function updateAndDrawParticles() {
+        if (!ctx) return;
+        for (let i = particleArray.length - 1; i >= 0; i--) {
+          let p = particleArray[i];
+          p.x += p.vx;
+          p.y += p.vy;
+          p.alpha -= p.decay;
+
+          // Garbage collection cleanup to preserve frame velocity and CPU RAM
+          if (p.alpha <= 0) {
+            particleArray.splice(i, 1);
+            continue;
+          }
+
+          ctx.save();
+          ctx.globalAlpha = p.alpha;
+          ctx.shadowBlur = 10;
+          ctx.shadowColor = p.color;
+          ctx.fillStyle = p.color;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+        }
+      }
+      // ==========================================
+
+      // Initialize Puck Velocity Vector Realignment Function
+      function resetPuck() {
+        puck.x = canvas.width / 2;
+        puck.y = canvas.height / 2;
+        puck.vx = (Math.random() > 0.5 ? 1 : -1) * (2 + Math.random() * 3);
+        puck.vy = (Math.random() > 0.5 ? 1 : -1) * (3 + Math.random() * 2);
+      }
+      resetPuck();
+
+      // Input Position Tracking Listeners
+      function updatePlayerPos(clientX: number, clientY: number) {
+        const rect = canvas.getBoundingClientRect();
+        const targetX = clientX - rect.left;
+        const targetY = clientY - rect.top;
+
+        if (targetX >= player.radius && targetX <= canvas.width - player.radius) {
+          player.x = targetX;
+        }
+        if (targetY >= canvas.height / 2 + player.radius && targetY <= canvas.height - player.radius) {
+          player.y = targetY;
+        }
+      }
+
+      canvas.addEventListener('mousemove', (e) => updatePlayerPos(e.clientX, e.clientY));
+      canvas.addEventListener('touchmove', (e) => {
+        if (e.touches[0]) updatePlayerPos(e.touches[0].clientX, e.touches[0].clientY);
+      });
+
+      // Rigid Body Circle Collision Evaluator Loop
+      function handlePaddleCollision(paddle: { x: number, y: number, radius: number, color: string }) {
+        const dx = puck.x - paddle.x;
+        const dy = puck.y - paddle.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+
+        if (distance < puck.radius + paddle.radius) {
+          const angle = Math.atan2(dy, dx);
+          const speed = Math.sqrt(puck.vx * puck.vx + puck.vy * puck.vy) + 1.5;
+          
+          const finalSpeed = Math.min(speed, puck.maxSpeed);
+          puck.vx = Math.cos(angle) * finalSpeed;
+          puck.vy = Math.sin(angle) * finalSpeed;
+
+          puck.x = paddle.x + Math.cos(angle) * (puck.radius + paddle.radius);
+          puck.y = paddle.y + Math.sin(angle) * (puck.radius + paddle.radius);
+
+          // NEW: Trigger particle blast on paddle collision matching structural color token profiles
+          triggerExplosion(puck.x, puck.y, paddle.color);
+        }
+      }
+
+      // Main Game Physics Frame Loop Routine Execution
+      function update() {
+        puck.x += puck.vx;
+        puck.y += puck.vy;
+
+        puck.vx *= 0.998;
+        puck.vy *= 0.998;
+
+        const aiTargetSpeed = ai.speed;
+        if (puck.x > ai.x + 10) ai.x += aiTargetSpeed;
+        else if (puck.x < ai.x - 10) ai.x -= aiTargetSpeed;
+
+        if (puck.y < canvas.height / 2) {
+          if (ai.y < puck.y - 30) ai.y += 2;
+          else if (ai.y > puck.y + 30) ai.y -= 2;
+        } else {
+          if (ai.y > 100) ai.y -= 2;
+        }
+
+        ai.x = Math.max(ai.radius, Math.min(canvas.width - ai.radius, ai.x));
+        ai.y = Math.max(ai.radius, Math.min(canvas.height / 2 - ai.radius, ai.y));
+
+        // Horizontal Boundary Walls Bounce
+        if (puck.x - puck.radius <= 0 || puck.x + puck.radius >= canvas.width) {
+          puck.vx *= -1;
+          puck.x = puck.x - puck.radius <= 0 ? puck.radius : canvas.width - puck.radius;
+          // NEW: Wall sparks (Toxic Green profile)
+          triggerExplosion(puck.x, puck.y, '#22c55e');
+        }
+
+        // Vertical Boundary Goal Check or Wall Bounce Evaluation
+        if (puck.y - puck.radius <= 0) {
+          if (puck.x >= goals.x && puck.x <= goals.x + goals.width) {
+            playerScore++;
+            playerScoreLabel.innerText = playerScore.toString();
+            triggerExplosion(puck.x, puck.y, '#D946EF'); // Goal Blast!
+            resetPuck();
+            return;
+          } else {
+            puck.vy *= -1;
+            puck.y = puck.radius;
+            triggerExplosion(puck.x, puck.y, '#22c55e');
+          }
+        }
+
+        if (puck.y + puck.radius >= canvas.height) {
+          if (puck.x >= goals.x && puck.x <= goals.x + goals.width) {
+            aiScore++;
+            aiScoreLabel.innerText = aiScore.toString();
+            triggerExplosion(puck.x, puck.y, '#ffffff'); // Goal Blast!
+            resetPuck();
+            return;
+          } else {
+            puck.vy *= -1;
+            puck.y = canvas.height - puck.radius;
+            triggerExplosion(puck.x, puck.y, '#22c55e');
+          }
+        }
+
+        handlePaddleCollision(player);
+        handlePaddleCollision(ai);
+      }
+
+      // Frame Canvas Painter Graph Render Engine Loop
+      function draw() {
+        if (!ctx) return;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Center Boundary Net Demarcation Line
+        ctx.strokeStyle = 'rgba(39, 39, 42, 0.4)';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(0, canvas.height / 2);
+        ctx.lineTo(canvas.width, canvas.height / 2);
+        ctx.stroke();
+
+        ctx.strokeStyle = 'rgba(39, 39, 42, 0.2)';
+        ctx.beginPath();
+        ctx.arc(canvas.width / 2, canvas.height / 2, 60, 0, Math.PI * 2);
+        ctx.stroke();
+
+        // Draw Top & Bottom Goal Post Slots
+        ctx.fillStyle = '#18181b';
+        ctx.fillRect(goals.x, 0, goals.width, goals.depth);
+        ctx.fillRect(goals.x, canvas.height - goals.depth, goals.width, goals.depth);
+
+        // NEW: Render active visual fragments onto the game surface canvas
+        updateAndDrawParticles();
+
+        // Render AI Striker (White Cyber Profile)
+        ctx.shadowBlur = 15;
+        ctx.shadowColor = '#ffffff';
+        ctx.fillStyle = ai.color;
+        ctx.beginPath();
+        ctx.arc(ai.x, ai.y, ai.radius, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Render Player Striker (Neon Pink Profile)
+        ctx.shadowColor = player.color;
+        ctx.fillStyle = player.color;
+        ctx.beginPath();
+        ctx.arc(player.x, player.y, player.radius, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Render Energy Puck Asset Core
+        ctx.shadowBlur = 18;
+        ctx.shadowColor = '#22c55e';
+        ctx.fillStyle = '#22c55e';
+        ctx.beginPath();
+        ctx.arc(puck.x, puck.y, puck.radius, 0, Math.PI * 2);
+        ctx.fill();
+        
+        ctx.shadowBlur = 0;
+      }
+
+      function loop() {
+        update();
+        draw();
+        requestAnimationFrame(loop);
+      }
+      requestAnimationFrame(loop);
+
+      resetBtn.addEventListener('click', () => {
+        playerScore = 0;
+        aiScore = 0;
+        playerScoreLabel.innerText = "0";
+        aiScoreLabel.innerText = "0";
+        particleArray = []; // Empty out current fragment allocations
+        resetPuck();
+      });
+    </script>
+  </body>
+</html>

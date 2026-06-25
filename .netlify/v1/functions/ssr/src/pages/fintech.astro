@@ -1,0 +1,159 @@
+---
+---
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>BABB CORE UTILITY | INTERACTIVE FLOW</title>
+    <style>
+      body {
+        background-color: #050505;
+        background-image: radial-gradient(circle at 50% -20%, rgba(34, 197, 94, 0.12), rgba(5, 5, 5, 0) 60%);
+      }
+    </style>
+  </head>
+  <body class="text-white min-h-screen flex flex-col font-sans antialiased">
+    
+    <div class="w-full h-[1px] bg-zinc-900"></div>
+
+    <header class="w-full max-w-[1600px] mx-auto px-6 md:px-12 py-6 flex justify-between items-center border-b border-zinc-900">
+      <div class="text-xs uppercase tracking-[0.3em] font-medium text-zinc-400">
+        Fintech Product Simulation <span class="text-zinc-600">©2026</span>
+      </div>
+      <div class="text-sm font-bold tracking-[0.4em] text-white">
+        IBRAHIM | LABS
+      </div>
+       <nav class="flex gap-8 text-xs uppercase tracking-[0.3em] text-zinc-400">
+        <a href="/" class="hover:text-[#D946EF] transition-colors">Home</a>
+        <a href="/director" class="hover:text-[#D946EF] transition-colors">Director App</a>
+        <a href="/fintech" class="hover:text-[#D946EF] transition-colors">Fintech App</a>
+        <a href="/arcade" class="hover:text-[#D946EF] transition-colors">Arcade</a>
+        <a href="/about" class="hover:text-[#D946EF] transition-colors">About</a>
+      </nav>
+    </header>
+
+    <main class="w-full max-w-[1200px] mx-auto px-6 py-16 flex-grow flex flex-col items-center justify-center">
+      
+      <div class="text-center mb-10 max-w-md">
+        <span class="text-[10px] uppercase tracking-[0.3em] text-green-400 font-bold bg-green-500/10 px-3 py-1 rounded-full">Babb Ecosystem Core Study</span>
+        <h1 class="text-3xl font-black tracking-tight mt-4 uppercase">Micro-Remittance Engine</h1>
+        <p class="text-xs text-zinc-500 mt-2 tracking-wide">A high-fidelity client-side user flow mapping deterministic exchange math and dynamic transaction data models.</p>
+      </div>
+
+      <div class="w-full max-w-md border border-zinc-900 bg-[#080808]/80 backdrop-blur-md p-6 rounded-sm relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-green-400 to-transparent"></div>
+        
+        <div class="mb-4 bg-zinc-950 p-4 border border-zinc-900 rounded-sm">
+          <div class="flex justify-between items-center mb-2">
+            <span class="text-[10px] uppercase tracking-wider text-zinc-500">You Send</span>
+            <span class="text-xs font-mono font-bold text-zinc-400">GBP (£)</span>
+          </div>
+          <input 
+            type="number" 
+            id="sendAmount" 
+            value="1000" 
+            class="w-full bg-transparent text-2xl font-mono text-white focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+          />
+        </div>
+
+        <div class="px-2 py-3 flex flex-col gap-2.5 border-l border-zinc-800 ml-6 my-2 text-xs">
+          <div class="flex justify-between text-zinc-500">
+            <span>Babb Network Fee (0.5%):</span>
+            <span id="feeLabel" class="font-mono text-zinc-300">£5.00</span>
+          </div>
+          <div class="flex justify-between text-zinc-500">
+            <span>Amount to Convert:</span>
+            <span id="convertLabel" class="font-mono text-zinc-300">£995.00</span>
+          </div>
+          <div class="flex justify-between text-zinc-400 font-medium">
+            <span>Guaranteed Rate:</span>
+            <span id="rateLabel" class="font-mono text-green-400">1 GBP = 4.75 SAR</span>
+          </div>
+        </div>
+
+        <div class="mb-6">
+          <label class="block text-[10px] uppercase tracking-wider text-zinc-500 mb-2">Destination Currency</label>
+          <select id="targetCurrency" class="w-full bg-[#0d0d0d] border border-zinc-800 text-zinc-300 px-4 py-3 text-sm rounded-sm focus:border-green-400 focus:outline-none transition-colors">
+            <option value="SAR">Saudi Riyal (SAR / ﷼)</option>
+            <option value="USD">US Dollar (USD / $)</option>
+          </select>
+        </div>
+
+        <div class="bg-zinc-900/40 p-4 border border-zinc-900 rounded-sm mb-6">
+          <div class="flex justify-between items-center mb-2">
+            <span class="text-[10px] uppercase tracking-wider text-zinc-500">Recipient Receives</span>
+            <span id="currencyBadge" class="text-xs font-mono font-bold text-green-400">SAR (﷼)</span>
+          </div>
+          <div id="receiveAmount" class="text-2xl font-mono text-white font-bold">4,726.25</div>
+        </div>
+
+        <button id="transferBtn" class="w-full bg-white text-black font-bold uppercase text-xs tracking-widest py-4 hover:bg-green-400 hover:text-black transition-all rounded-sm">
+          Execute Protocol
+        </button>
+      </div>
+
+    </main>
+
+    <footer class="w-full max-w-[1600px] mx-auto px-6 md:px-12 py-8 flex justify-between items-center text-[10px] uppercase tracking-[0.2em] text-zinc-600 border-t border-zinc-900/50 mt-12">
+      <div>Built with Astro Framework</div>
+      <div>All Rights Reserved</div>
+    </footer>
+
+    <script>
+      const sendInput = document.getElementById('sendAmount') as HTMLInputElement;
+      const currencySelect = document.getElementById('targetCurrency') as HTMLSelectElement;
+      
+      const feeLabel = document.getElementById('feeLabel');
+      const convertLabel = document.getElementById('convertLabel');
+      const rateLabel = document.getElementById('rateLabel');
+      const currencyBadge = document.getElementById('currencyBadge');
+      const receiveAmount = document.getElementById('receiveAmount');
+      const transferBtn = document.getElementById('transferBtn');
+
+      // Static Exchange Matrix Modeling Real-Time Fintech APIs
+      const rates = {
+        SAR: 4.75,
+        USD: 1.27
+      };
+
+      function updateRemittanceEngine() {
+        const sendValue = parseFloat(sendInput.value) || 0;
+        const target = currencySelect.value;
+        const rate = rates[target];
+
+        // 1. Calculate transaction infrastructure fees
+        const fee = sendValue * 0.005; 
+        const convertibleAmount = Math.max(0, sendValue - fee);
+
+        // 2. Compute international currency conversion math
+        const finalPayout = convertibleAmount * rate;
+
+        // 3. Inject calculations dynamically into the UI State
+        feeLabel.innerText = `£${fee.toFixed(2)}`;
+        convertLabel.innerText = `£${convertibleAmount.toFixed(2)}`;
+        rateLabel.innerText = `1 GBP = ${rate.toFixed(2)} ${target}`;
+        currencyBadge.innerText = target === 'SAR' ? 'SAR (﷼)' : 'USD ($)';
+        receiveAmount.innerText = finalPayout.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      }
+
+      // Add input event listeners to recalculate calculations in real time
+      sendInput.addEventListener('input', updateRemittanceEngine);
+      currencySelect.addEventListener('change', updateRemittanceEngine);
+
+      // Interactive submission feedback workflow
+      transferBtn.addEventListener('click', () => {
+        if ((parseFloat(sendInput.value) || 0) <= 0) return alert('Please input a valid transfer value.');
+        
+        transferBtn.innerText = "TRANSACTION PROCESSED!";
+        transferBtn.style.backgroundColor = "#22c55e";
+        transferBtn.style.color = "#ffffff";
+
+        setTimeout(() => {
+          transferBtn.innerText = "Execute Protocol";
+          transferBtn.style.backgroundColor = "#ffffff";
+          transferBtn.style.color = "#000000";
+        }, 2000);
+      });
+    </script>
+  </body>
+</html>

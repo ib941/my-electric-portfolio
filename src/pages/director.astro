@@ -1,0 +1,260 @@
+---
+---
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>AI CREATIVE DIRECTOR | IBRAHIM</title>
+    <style>
+      body {
+        background-color: #050505;
+        background-image: radial-gradient(circle at 50% -20%, rgba(217, 70, 239, 0.12), rgba(5, 5, 5, 0) 60%);
+      }
+    </style>
+  </head>
+  <body class="text-white min-h-screen flex flex-col font-sans antialiased">
+    
+    <div class="w-full h-[1px] bg-zinc-900"></div>
+
+    <header class="w-full max-w-[1600px] mx-auto px-6 md:px-12 py-6 flex justify-between items-center border-b border-zinc-900">
+      <div class="text-xs uppercase tracking-[0.3em] font-medium text-zinc-400">
+        AI Production Core <span class="text-zinc-600">©2026</span>
+      </div>
+      <div class="text-sm font-bold tracking-[0.4em] text-white">
+        IBRAHIM
+      </div>
+      <nav class="flex gap-8 text-xs uppercase tracking-[0.3em] text-zinc-400">
+        <a href="/" class="hover:text-[#D946EF] transition-colors">Home</a>
+        <a href="/director" class="hover:text-[#D946EF] transition-colors">Director App</a>
+        <a href="/fintech" class="hover:text-[#D946EF] transition-colors">Fintech App</a>
+        <a href="/arcade" class="hover:text-[#D946EF] transition-colors">Arcade</a>
+        <a href="/about" class="hover:text-[#D946EF] transition-colors">About</a>
+      </nav>
+    </header>
+
+    <main class="w-full max-w-[1600px] mx-auto px-6 md:px-12 flex-grow py-12 flex flex-col lg:flex-row gap-12">
+      
+      <section class="w-full lg:w-[400px] flex flex-col gap-6 shrink-0">
+        <div class="border border-zinc-900 bg-[#080808] p-6 rounded-sm">
+          <h2 class="text-xs uppercase tracking-widest text-zinc-400 mb-6 font-bold">Campaign Parameters</h2>
+          
+          <div class="mb-4">
+            <label class="block text-[10px] uppercase tracking-wider text-zinc-500 mb-2">Brand Aesthetic</label>
+            <select id="brandStyle" class="w-full bg-[#0d0d0d] border border-zinc-800 text-zinc-300 px-4 py-3 text-sm rounded-sm focus:border-[#D946EF] focus:outline-none transition-colors">
+              <option value="luxury">Ultra-Luxury / Premium High-End</option>
+              <option value="minimalist">Modernist / Stark Minimalism</option>
+              <option value="cyber">Cinematic / Cyberpunk Tech</option>
+            </select>
+          </div>
+
+          <div class="mb-6">
+            <label class="block text-[10px] uppercase tracking-wider text-zinc-500 mb-2">Cinematic Lighting Suite</label>
+            <select id="lightingStyle" class="w-full bg-[#0d0d0d] border border-zinc-800 text-zinc-300 px-4 py-3 text-sm rounded-sm focus:border-[#D946EF] focus:outline-none transition-colors">
+              <option value="chiaroscuro">Chiaroscuro / Moody High-Contrast Studio</option>
+              <option value="volumetric">Volumetric Rays / Deep Atmosphere</option>
+              <option value="golden">Golden Hour / Soft Editorial Diffused</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="border border-zinc-900 bg-[#080808] p-6 rounded-sm">
+          <h2 class="text-xs uppercase tracking-widest text-zinc-400 mb-6 font-bold">E-Com Strategy Simulator</h2>
+          
+          <div class="mb-4">
+            <div class="flex justify-between text-[10px] uppercase tracking-wider text-zinc-500 mb-2">
+              <span>Campaign Budget</span>
+              <span id="budgetValue" class="text-white font-mono">$5,000</span>
+            </div>
+            <input 
+              type="range" 
+              id="campaignBudget" 
+              min="1000" 
+              max="25000" 
+              step="500" 
+              value="5000" 
+              class="w-full accent-[#D946EF] bg-zinc-900 h-1 rounded-sm appearance-none cursor-pointer"
+            />
+          </div>
+
+          <div class="mt-6 border-t border-zinc-900/80 pt-4 flex flex-col gap-3">
+            <div class="flex justify-between text-xs">
+              <span class="text-zinc-500">Salla Store Graphics:</span>
+              <span id="allocSalla" class="font-mono text-zinc-300">$1,000</span>
+            </div>
+            <div class="flex justify-between text-xs">
+              <span class="text-zinc-500">AI Video Production:</span>
+              <span id="allocVideo" class="font-mono text-zinc-300">$2,000</span>
+            </div>
+            <div class="flex justify-between text-xs">
+              <span class="text-zinc-500">Targeted Ad Spend:</span>
+              <span id="allocAds" class="font-mono text-zinc-300">$2,000</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="flex-grow flex flex-col gap-8">
+        <div class="w-full border border-zinc-900 bg-[#080808] p-6 rounded-sm flex flex-col sm:flex-row gap-4 items-end">
+          <div class="flex-grow w-full">
+            <label class="block text-[10px] uppercase tracking-wider text-zinc-500 mb-2">Raw Product Core Idea / Concept</label>
+            <input 
+              type="text" 
+              id="userBrief" 
+              placeholder="e.g., A dark emerald perfume bottle on wet black volcanic glass stones..." 
+              class="w-full bg-[#0d0d0d] border border-zinc-800 text-white px-4 py-3 text-sm rounded-sm focus:border-[#D946EF] focus:outline-none transition-colors placeholder-zinc-700"
+            />
+          </div>
+          <button 
+            id="generateBtn" 
+            class="w-full sm:w-auto bg-white text-black font-bold uppercase text-xs tracking-widest px-8 py-3.5 hover:bg-[#D946EF] hover:text-white transition-all shrink-0 rounded-sm"
+          >
+            Architect Bundle
+          </button>
+        </div>
+
+        <div id="outputGrid" class="hidden grid grid-cols-1 md:grid-cols-2 gap-6">
+          
+          <div class="border border-zinc-900 bg-[#080808] p-6 rounded-sm relative overflow-hidden group">
+            <div class="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-[#D946EF] to-transparent"></div>
+            <div class="flex justify-between items-center mb-4">
+              <span class="text-[10px] uppercase tracking-widest text-[#D946EF] font-bold">01 . Midjourney Rendering Script</span>
+              <button onclick="copyToClipboard('mjOutput', this)" class="text-[9px] uppercase tracking-widest text-[#D946EF] bg-[#D946EF]/10 px-2.5 py-1 rounded-sm hover:bg-[#D946EF]/20 transition-all font-medium">
+                Copy Prompt
+              </button>
+            </div>
+            <p id="mjOutput" class="text-sm text-zinc-300 leading-relaxed font-mono bg-zinc-950 p-4 border border-zinc-900 rounded-sm select-all cursor-pointer hover:border-zinc-800 transition-colors">Your generated visual engine prompt will appear here...</p>
+          </div>
+
+          <div class="border border-zinc-900 bg-[#080808] p-6 rounded-sm relative overflow-hidden group">
+            <div class="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-white to-transparent"></div>
+            <div class="flex justify-between items-center mb-4">
+              <span class="text-[10px] uppercase tracking-widest text-white font-bold">02 . Kling Cinematic Motion Director</span>
+              <button onclick="copyToClipboard('klingOutput', this)" class="text-[9px] uppercase tracking-widest text-white bg-white/10 px-2.5 py-1 rounded-sm hover:bg-white/20 transition-all font-medium">
+                Copy Script
+              </button>
+            </div>
+            <p id="klingOutput" class="text-sm text-zinc-300 leading-relaxed font-mono bg-zinc-950 p-4 border border-zinc-900 rounded-sm select-all cursor-pointer hover:border-zinc-800 transition-colors">Your cinematic tracking directives will appear here...</p>
+          </div>
+
+        </div>
+      </section>
+    </main>
+
+    <footer class="w-full max-w-[1600px] mx-auto px-6 md:px-12 py-8 flex justify-between items-center text-[10px] uppercase tracking-[0.2em] text-zinc-600">
+      <div>Built with Astro & Tailwind</div>
+      <div>All Rights Reserved</div>
+    </footer>
+
+    <script>
+      const generateBtn = document.getElementById('generateBtn');
+      const outputGrid = document.getElementById('outputGrid');
+      const mjOutput = document.getElementById('mjOutput');
+      const klingOutput = document.getElementById('klingOutput');
+
+      // Budget Allocation Element Selectors
+      const budgetSlider = document.getElementById('campaignBudget') as HTMLInputElement;
+      const budgetValue = document.getElementById('budgetValue');
+      const allocSalla = document.getElementById('allocSalla');
+      const allocVideo = document.getElementById('allocVideo');
+      const allocAds = document.getElementById('allocAds');
+      const brandStyleSelect = document.getElementById('brandStyle') as HTMLSelectElement;
+
+      // Dynamic Live Strategy Calculator Function
+      function calculateStrategy() {
+        const total = parseInt(budgetSlider.value);
+        budgetValue.innerText = `$${total.toLocaleString()}`;
+        
+        // 20% for storefront UI assets, 40% high-end content generation, 40% targeted campaign spend
+        allocSalla.innerText = `$${Math.round(total * 0.2).toLocaleString()}`;
+        allocVideo.innerText = `$${Math.round(total * 0.4).toLocaleString()}`;
+        allocAds.innerText = `$${Math.round(total * 0.4).toLocaleString()}`;
+      }
+
+      // Add real-time event listener to the budget slider
+      budgetSlider.addEventListener('input', calculateStrategy);
+
+      // Dynamic Brand Theme Shifter Accent Logic
+      brandStyleSelect.addEventListener('change', () => {
+        const style = brandStyleSelect.value;
+        const mjGradient = document.querySelector('.from-\\[\\#D946EF\\]') as HTMLElement;
+        const mjCopyBtn = document.querySelector("button[onclick*='mjOutput']") as HTMLElement;
+
+        if (!mjGradient || !mjCopyBtn) return;
+
+        if (style === 'cyber') {
+          // Dynamic shift to vivid electric cyan profile
+          mjGradient.className = "absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-cyan-400 to-transparent";
+          mjCopyBtn.style.color = "#22d3ee";
+          budgetSlider.style.setProperty('--tw-accent-color', '#22d3ee');
+        } else if (style === 'minimalist') {
+          // Dynamic shift to clean surgical gallery gray profile
+          mjGradient.className = "absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-zinc-400 to-transparent";
+          mjCopyBtn.style.color = "#a1a1aa";
+          budgetSlider.style.setProperty('--tw-accent-color', '#a1a1aa');
+        } else {
+          // Default luxury premium profile (Signature Pink Glow)
+          mjGradient.className = "absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-[#D946EF] to-transparent";
+          mjCopyBtn.style.color = "#D946EF";
+          budgetSlider.style.setProperty('--tw-accent-color', '#D946EF');
+        }
+      });
+
+      generateBtn.addEventListener('click', () => {
+        const brief = (document.getElementById('userBrief') as HTMLInputElement).value;
+        const aesthetic = brandStyleSelect.value;
+        const lighting = (document.getElementById('lightingStyle') as HTMLSelectElement).value;
+
+        if (!brief) return alert('Please enter a concept brief first.');
+
+        // 1. Structural Logic for Midjourney Output Mapping
+        let lightingText = "chiaroscuro moody high-contrast lighting, dark shadows, specular reflections";
+        if (lighting === "volumetric") lightingText = "volumetric light rays piercing through atmosphere, cinematic haze, dramatic dust particles";
+        if (lighting === "golden") lightingText = "editorial soft golden hour lighting, warm glow, diffused elegant refraction";
+
+        let styleModifiers = "commercial luxury product photography, extreme detail, 8k resolution, photorealistic, shot on Hasselblad, sleek composition --ar 4:5 --style raw --v 6.0";
+        if (aesthetic === "minimalist") styleModifiers = "high-end stark minimalism, spacious composition, crisp surgical focus, high luxury gallery feel, premium texture contrast --ar 4:5 --style raw --v 6.0";
+        if (aesthetic === "cyber") styleModifiers = "futuristic cybernetic luxury design, neon fluid accents, technical geometry contrast, anamorphic lens flares, high-octane styling --ar 4:5 --v 6.0";
+
+        // 2. Structural Logic for Kling/Motion Output Mapping
+        let motionText = "Cinematic slow-motion 4k macro footage. A precise, elegant slow-dolly camera tracking shot gliding past the subject. Soft environmental dust floating.";
+        if (lighting === "volumetric") motionText = "Atmospheric macro 4k video. Light rays shifting across the product texture. Camera executes a smooth, high-end crane tracking down.";
+        
+        // Final String Assembly Engine
+        mjOutput.innerText = `${brief}, ${lightingText}, ${styleModifiers}`;
+        klingOutput.innerText = `${motionText} The visual elements of [${brief}] begin to dynamically interact. High-viscosity liquid particles and fluid explosions activate smoothly with hyper-realistic computational physics dynamics, luxury editorial pacing, premium commercial finish.`;
+
+        // Unveil Results Grid
+        outputGrid.classList.remove('hidden');
+      });
+
+      // Clipboard logic wrapper definition
+      window.copyToClipboard = function(elementId, buttonElement) {
+        const textToCopy = document.getElementById(elementId).innerText;
+        
+        navigator.clipboard.writeText(textToCopy).then(() => {
+          const originalText = buttonElement.innerText;
+          
+          buttonElement.innerText = "COPIED!";
+          buttonElement.style.color = "#ffffff";
+          buttonElement.style.backgroundColor = "rgba(34, 197, 94, 0.2)";
+          
+          setTimeout(() => {
+            buttonElement.innerText = originalText;
+            if (elementId === 'mjOutput') {
+              const currentStyle = brandStyleSelect.value;
+              if (currentStyle === 'cyber') buttonElement.style.color = "#22d3ee";
+              else if (currentStyle === 'minimalist') buttonElement.style.color = "#a1a1aa";
+              else buttonElement.style.color = "#D946EF";
+              buttonElement.style.backgroundColor = "rgba(217, 70, 239, 0.1)";
+            } else {
+              buttonElement.style.color = "#ffffff";
+              buttonElement.style.backgroundColor = "rgba(255, 255, 255, 0.1)";
+            }
+          }, 2000);
+        }).catch(err => {
+          console.error('Failed to copy text: ', err);
+        });
+      }
+    </script>
+  </body>
+</html>
