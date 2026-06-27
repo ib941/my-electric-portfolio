@@ -1,4 +1,3 @@
-// src/pages/api/chat.ts
 import type { APIRoute } from 'astro';
 
 export const POST: APIRoute = async ({ request }) => {
@@ -9,8 +8,8 @@ export const POST: APIRoute = async ({ request }) => {
       return new Response(JSON.stringify({ error: 'Query required' }), { status: 400 });
     }
 
-    // Secure server-side request using your hidden Gemini API Key
-    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${import.meta.env.GEMINI_API_KEY}`, {
+    // Upgraded model endpoint to gemini-2.0-flash
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${import.meta.env.GEMINI_API_KEY}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -37,7 +36,20 @@ When a user submits a query, analyze it against this framework and reply with di
     });
 
     const data = await response.json();
-    const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || "System structural loop error.";
+
+    // Debug helper: This prints the exact response to your Netlify dashboard logs if it fails again
+    console.log("Gemini raw response:", JSON.stringify(data, null, 2));
+
+    // Bulletproof safe extraction
+    let reply = "System structural loop error.";
+
+    if (data?.candidates && data.candidates.length > 0) {
+      const parts = data.candidates[0]?.content?.parts;
+      if (parts && parts.length > 0) {
+        // Combines all parts of the response text securely
+        reply = parts.map((p: any) => p.text || "").join(" ");
+      }
+    }
 
     return new Response(JSON.stringify({ reply }), {
       status: 200,
