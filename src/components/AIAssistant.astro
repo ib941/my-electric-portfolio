@@ -1,67 +1,50 @@
----
-// src/components/AIAssistant.astro
----
-<div class="fixed bottom-6 right-6 z-50 font-sans">
-  <button 
-    id="ai-toggle" 
-    class="bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 w-12 h-12 rounded-full flex items-center justify-center shadow-2xl transition-all duration-300 hover:scale-105 active:scale-95"
-  >
-    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 0 1 7.54 16.59c-.44.47-.62 1.1-.5 1.73l.27 1.34a.5.5 0 0 1-.72.54l-2.09-1.05a1.86 1.86 0 0 0-1.63-.08A10 10 0 1 1 12 2z"/></svg>
-  </button>
-
-  <div 
-    id="ai-chat-window" 
-    class="hidden absolute bottom-16 right-0 w-80 sm:w-96 h-[450px] bg-zinc-950 border border-zinc-800 rounded-2xl shadow-2xl flex flex-col overflow-hidden transition-all duration-200"
-  >
-    <div class="p-4 border-b border-zinc-800 bg-zinc-900/50 flex justify-between items-center">
-      <div>
-        <h3 class="text-sm font-medium text-zinc-200">System Core</h3>
-        <p class="text-[11px] text-zinc-500 flex items-center gap-1.5">
-          <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full inline-block animate-pulse"></span> Connected
-        </p>
-      </div>
-      <button id="ai-close" class="text-zinc-500 hover:text-zinc-300 text-xs uppercase font-medium">Close</button>
-    </div>
-
-    <div id="ai-messages" class="flex-1 p-4 overflow-y-auto space-y-4 text-sm text-zinc-300">
-      <div class="bg-zinc-900/40 border border-zinc-900 p-3 rounded-xl max-w-[85%] text-zinc-400">
-        Hi, I'm your core AI assistant. Ask me anything about Ibrahim's projects, technical expertise, or design workflows.
-      </div>
-    </div>
-
-    <form id="ai-form" class="p-3 border-t border-zinc-800 bg-zinc-900/20 flex gap-2">
-      <input 
-        type="text" 
-        id="ai-input" 
-        placeholder="Type a query..." 
-        autocomplete="off"
-        class="flex-1 bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-sm text-zinc-200 focus:outline-none focus:border-zinc-700"
-      />
-      <button type="submit" class="bg-zinc-200 hover:bg-white text-black px-4 py-2 rounded-xl text-xs font-semibold">
-        Send
-      </button>
-    </form>
-  </div>
-</div>
-
 <script>
+  // 1. Define the helper functions at the top so VS Code knows they exist
+  function appendMessage(text: string, sender: 'user' | 'system', isLoading = false) {
+    const messagesContainer = document.getElementById('ai-messages');
+    if (!messagesContainer) return;
+    const msg = document.createElement('div');
+    msg.className = sender === 'user' 
+      ? 'bg-zinc-800 text-zinc-200 p-3 rounded-xl max-w-[85%] ml-auto border border-zinc-700' 
+      : 'bg-zinc-900/40 text-zinc-300 p-3 rounded-xl max-w-[85%] border border-zinc-900';
+    if (isLoading) msg.id = 'ai-loading-bubble';
+    msg.textContent = text;
+    messagesContainer.appendChild(msg);
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+  }
+
+  function removeLoadingMessage() {
+    document.getElementById('ai-loading-bubble')?.remove();
+  }
+
+  // 2. Grab your DOM elements
   const toggleBtn = document.getElementById('ai-toggle');
   const closeBtn = document.getElementById('ai-close');
   const chatWindow = document.getElementById('ai-chat-window');
   const form = document.getElementById('ai-form') as HTMLFormElement;
   const input = document.getElementById('ai-input') as HTMLInputElement;
-  const messagesContainer = document.getElementById('ai-messages');
 
+  // 3. Keep your event listeners right below
   toggleBtn?.addEventListener('click', () => {
-    chatWindow?.classList.toggle('hidden');
-    if (!chatWindow?.classList.contains('hidden')) input?.focus();
+    const isHidden = chatWindow?.classList.contains('hidden');
+    if (isHidden) {
+      chatWindow?.classList.remove('hidden');
+      chatWindow?.classList.add('flex'); 
+      input?.focus();
+    } else {
+      chatWindow?.classList.remove('flex');
+      chatWindow?.classList.add('hidden');
+    }
   });
 
-  closeBtn?.addEventListener('click', () => chatWindow?.classList.add('hidden'));
+  closeBtn?.addEventListener('click', () => {
+    chatWindow?.classList.remove('flex');
+    chatWindow?.classList.add('hidden');
+  });
 
   form?.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const query = input?.value.trim();
+    const query = input.value.trim();
     if (!query) return;
 
     appendMessage(query, 'user');
@@ -88,20 +71,4 @@
       appendMessage("Network connection interrupted.", 'system');
     }
   });
-
-  function appendMessage(text: string, sender: 'user' | 'system', isLoading = false) {
-    if (!messagesContainer) return;
-    const msg = document.createElement('div');
-    msg.className = sender === 'user' 
-      ? 'bg-zinc-800 text-zinc-200 p-3 rounded-xl max-w-[85%] ml-auto border border-zinc-700' 
-      : 'bg-zinc-900/40 text-zinc-300 p-3 rounded-xl max-w-[85%] border border-zinc-900';
-    if (isLoading) msg.id = 'ai-loading-bubble';
-    msg.textContent = text;
-    messagesContainer.appendChild(msg);
-    messagesContainer.scrollTop = messagesContainer.scrollHeight;
-  }
-
-  function removeLoadingMessage() {
-    document.getElementById('ai-loading-bubble')?.remove();
-  }
 </script>

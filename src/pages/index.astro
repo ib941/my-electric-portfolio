@@ -1,4 +1,5 @@
 ---
+import AIAssistant from '../components/AIAssistant.astro';
 ---
 <html lang="en">
   <head>
@@ -84,6 +85,9 @@
       <div>Built with Astro & Tailwind</div>
       <div>All Rights Reserved</div>
     </footer>
+
+    {/* The AI Assistant component is now cleanly injected at the layout level */}
+    <AIAssistant />
 
   </body>
 </html>
