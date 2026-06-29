@@ -8,7 +8,6 @@ export const POST: APIRoute = async ({ request }) => {
       return new Response(JSON.stringify({ error: 'Query required' }), { status: 400 });
     }
 
-    // Upgraded model endpoint to gemini-2.0-flash
     const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${import.meta.env.GEMINI_API_KEY}`, {
       method: 'POST',
       headers: {
@@ -37,16 +36,13 @@ When a user submits a query, analyze it against this framework and reply with di
 
     const data = await response.json();
 
-    // Debug helper: This prints the exact response to your Netlify dashboard logs if it fails again
     console.log("Gemini raw response:", JSON.stringify(data, null, 2));
 
-    // Bulletproof safe extraction
     let reply = "System structural loop error.";
 
     if (data?.candidates && data.candidates.length > 0) {
       const parts = data.candidates[0]?.content?.parts;
       if (parts && parts.length > 0) {
-        // Combines all parts of the response text securely
         reply = parts.map((p: any) => p.text || "").join(" ");
       }
     }
@@ -57,6 +53,7 @@ When a user submits a query, analyze it against this framework and reply with di
     });
 
   } catch (error) {
-    return new Response(JSON.stringify({ error: 'Internal server error' }), { status: 500 });
+    console.log("API Error:", error);
+    return new Response(JSON.stringify({ error: 'Internal server error', details: String(error) }), { status: 500 });
   }
 };
